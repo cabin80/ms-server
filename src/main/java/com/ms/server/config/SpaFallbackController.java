@@ -1,19 +1,23 @@
 package com.ms.server.config;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-public class SpaFallbackController implements ErrorController {
+@RestController
+@RequestMapping
+public class SpaFallbackController {
 
-    @RequestMapping("/error")
-    public String handleError(HttpServletRequest request) {
-        String uri = (String) request.getAttribute("jakarta.servlet.error.request_uri");
-        if (uri != null && (uri.startsWith("/api/") || uri.startsWith("/upload/"))) {
-            return null;
-        }
-        return "forward:/index.html";
+    @GetMapping("/admin")
+    public ResponseEntity<String> adminPage() {
+        return ResponseEntity.ok()
+                .header("Content-Type", "text/html; charset=utf-8")
+                .body("<!DOCTYPE html><html><body><h1>Admin Page Test</h1></body></html>");
+    }
+
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("pong");
     }
 }
