@@ -30,6 +30,17 @@ public class SpaFallbackController {
         }
     }
 
+    @GetMapping(value = "/v2", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> v2Page() {
+        try {
+            var resource = resourceLoader.getResource("classpath:/static/v2/index.html");
+            var content = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            return ResponseEntity.ok().body(content);
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("v2 page not found");
+        }
+    }
+
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
         return ResponseEntity.ok("pong");

@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <title>音乐管理系统 - AdminLTE 4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-<link rel="stylesheet" href="/vendor/source-sans-3.css" crossorigin="anonymous" media="print" onload="this.media = 'all'" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.1.1/index.css" crossorigin="anonymous" media="print" onload="this.media = 'all'" />
 <link rel="stylesheet" href="/vendor/overlayscrollbars/2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
 <link rel="stylesheet" href="/vendor/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
 <link rel="stylesheet" href="/css/adminlte.min.css" />
@@ -430,18 +430,17 @@ async function loadArtistTree() {
     html += '</ul>';
     el.innerHTML = html;
     
-    // 绑定展开/收起
+    // 绑定展开/收起 — 点击整行触发，不需要点图标
     el.querySelectorAll('.tree-node').forEach(node => {
       node.addEventListener('click', function(e) {
-        if (e.target.closest('.toggle-icon')) {
-          const children = this.nextElementSibling;
-          const isOpen = children.classList.contains('open');
-          children.classList.toggle('open', !isOpen);
-          this.querySelector('.toggle-icon').className = isOpen
-            ? 'bi bi-chevron-down ms-auto toggle-icon'
-            : 'bi bi-chevron-up ms-auto toggle-icon';
-          if (!isOpen && !children.dataset.loaded) loadTreeChildren(this.dataset.id, children);
-        }
+        // 右键菜单不触发
+        const children = this.nextElementSibling;
+        const isOpen = children.classList.contains('open');
+        children.classList.toggle('open', !isOpen);
+        this.querySelector('.toggle-icon').className = isOpen
+          ? 'bi bi-chevron-down ms-auto toggle-icon'
+          : 'bi bi-chevron-up ms-auto toggle-icon';
+        if (!isOpen && !children.dataset.loaded) loadTreeChildren(this.dataset.id, children);
       });
       // 右键
       node.addEventListener('contextmenu', function(e) {
