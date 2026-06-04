@@ -92,4 +92,10 @@ public interface SongMapper extends BaseMapper<Song> {
 
     @Select("SELECT COUNT(*) FROM playlist_songs WHERE playlist_id = #{playlistId}")
     Long countByPlaylist(@Param("playlistId") Integer playlistId);
+
+    /**
+     * 仅更新歌词字段，不修改其他字段（用于歌词获取场景）
+     */
+    @Update("UPDATE songs SET lyrics = #{lyrics} WHERE id = #{id}")
+    int updateLyricsById(@Param("id") Integer id, @Param("lyrics") String lyrics);
 }

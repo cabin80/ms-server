@@ -19,10 +19,12 @@ public class MusicService {
     private final UserMapper userMapper;
     private final FavoriteMapper favoriteMapper;
     private final PlaylistSongMapper playlistSongMapper;
+    private final LyricsAcquisitionService lyricsAcquisitionService;
 
     public MusicService(SongMapper songMapper, ArtistMapper artistMapper, AlbumMapper albumMapper,
                         PlaylistMapper playlistMapper, UserMapper userMapper, FavoriteMapper favoriteMapper,
-                        PlaylistSongMapper playlistSongMapper) {
+                        PlaylistSongMapper playlistSongMapper,
+                        LyricsAcquisitionService lyricsAcquisitionService) {
         this.songMapper = songMapper;
         this.artistMapper = artistMapper;
         this.albumMapper = albumMapper;
@@ -30,27 +32,51 @@ public class MusicService {
         this.userMapper = userMapper;
         this.favoriteMapper = favoriteMapper;
         this.playlistSongMapper = playlistSongMapper;
+        this.lyricsAcquisitionService = lyricsAcquisitionService;
     }
 
     // ===================== Songs ======================
 
+    /**
+     * 获取所有歌曲，调用 LyricsAcquisitionService 为缺少歌词的歌曲抓取歌词
+     */
     public List<Song> getAllSongs() {
+        List<Song> songs = songMapper.selectAllWithDetails();
+        for (Song song : songs) {
+            lyricsAcquisitionService.acquireIfMissing(song);
+        }
         return songMapper.selectAllWithDetails();
     }
 
     public Song getSongById(Integer id) {
+        Song song = songMapper.selectByIdWithDetails(id);
+        if (song != null) {
+            lyricsAcquisitionService.acquireIfMissing(song);
+        }
         return songMapper.selectByIdWithDetails(id);
     }
 
     public List<Song> getSongsByArtist(Integer artistId) {
+        List<Song> songs = songMapper.selectByArtistIdWithDetails(artistId);
+        for (Song song : songs) {
+            lyricsAcquisitionService.acquireIfMissing(song);
+        }
         return songMapper.selectByArtistIdWithDetails(artistId);
     }
 
     public List<Song> getSongsByAlbum(Integer albumId) {
+        List<Song> songs = songMapper.selectByAlbumIdWithDetails(albumId);
+        for (Song song : songs) {
+            lyricsAcquisitionService.acquireIfMissing(song);
+        }
         return songMapper.selectByAlbumIdWithDetails(albumId);
     }
 
     public List<Song> getSongsByPlaylist(Integer playlistId) {
+        List<Song> songs = songMapper.selectByPlaylistIdWithDetails(playlistId);
+        for (Song song : songs) {
+            lyricsAcquisitionService.acquireIfMissing(song);
+        }
         return songMapper.selectByPlaylistIdWithDetails(playlistId);
     }
 
