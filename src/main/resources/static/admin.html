@@ -116,7 +116,7 @@
         <div class="col-md-4 mb-3"><label class="form-label">关联歌手</label><input type="text" class="form-control" id="albumArtistName" readonly></div>
       </div>
       <div class="mb-3">
-        <label class="form-label">选择歌曲文件夹 <span class="text-danger">*</span></label>
+        <label class="form-label">选择文件夹 <span class="text-danger">*</span></label>
         <input type="file" class="form-control" id="albumSongs" webkitdirectory multiple>
         <div class="form-text">选择包含歌曲音频文件的文件夹，支持 mp3/flac/wav</div>
         <div id="songFileList" class="mt-2 small text-muted"></div>
@@ -660,7 +660,7 @@ document.getElementById('albumSubmit').addEventListener('click', async function(
   const name = document.getElementById('albumName').value.trim();
   if (!name) return showToast('请输入专辑名称', 'warning');
   const songInput = document.getElementById('albumSongs');
-  if (!songInput.files?.length) return showToast('请选择歌曲文件夹', 'warning');
+  if (!songInput.files?.length) return showToast('请选择文件夹', 'warning');
   
   const btn = this; btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>上传中...';
   const progressBar = document.getElementById('albumUploadProgress');
